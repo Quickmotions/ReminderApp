@@ -3,7 +3,7 @@ from time import sleep
 import threading as th
 from datetime import datetime
 # dependencies
-import notify
+from pynotifier import Notification
 
 class FileManager:
     def __init__(self, f_line=None, create_new=False):
@@ -15,6 +15,9 @@ class FileManager:
             self.time = f_line[1]
             self.date = f_line[2]
             self.repeat = f_line[3]
+            print(self.date)
+
+            print(self.date)
 
     def create_new(self):
         print('Create a new Reminder:')
@@ -28,18 +31,24 @@ class FileManager:
 
     def update_reminder_times(self):
         now = datetime.now()
-        current_time = now.strftime("%H:%M")
-        current_date = now.date()
-        # if self.time < current_time and self.date < current_date:
-
-
+        current_time = str(now.strftime("%H:%M"))
+        current_date = str(now.date())
+        if self.time <= current_time and self.date <= current_date:
+            if self.repeat == 'hourly':
+                if int(self.time[:2]) < 23:
+                    self.time = str(int(self.time[:2]) + 1) + self.time[2:]
+                else:
+                    self.time = '00' + self.time[2:]
+            if self.repeat == 'daily':
+                if int(self.date[8:]) < 30: # have to add diffrence depending on months maybe mo0ve to new file
+                    self.date = self.date[:8] + str(int(self.date[8:]) + 1)
+            # 2021-07-2
 
 def time_manager(r_list):
     while True:
         now = datetime.now()
         current_time = now.strftime("%H:%M")
         current_date = now.date()
-        print(f'{current_time}{current_date}')
         check_reminders(r_list, current_time, current_date)
         sleep(60)
 
@@ -48,9 +57,13 @@ def check_reminders(r_list, current_time, current_date):
     for r in r_list:
         sleep(0.5)
         if r.time == str(current_time) and r.date == str(current_date):
-            print('true')
-            notify.notification(f'Reminder: for {r.reminder} at {r.time}', title=f'{r.reminder} at {r.time}')
-            print(r.reminder)
+            Notification(
+                title=f'{r.reminder} at {r.time}',
+                description=f'Reminder: {r.reminder} at {r.time}, notified on a {r.repeat} basis',
+                duration=10,  # Duration in seconds
+                urgency='normal'
+            ).send()
+            r.update_reminder_times()
 
 
 if __name__ == '__main__':
