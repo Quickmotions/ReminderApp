@@ -47,11 +47,7 @@ def time_manager(r_list):
 def check_reminders(r_list, current_time, current_date):
     for r in r_list:
         sleep(0.5)
-        print('-------------')
-        print(f'{r.date}\n{current_date}')
-        print('is equal: ', str(r.date) == str(current_time))
-
-        if r.time == current_time and current_date == r.date:
+        if r.time == str(current_time) and r.date == str(current_date):
             print('true')
             notify.notification(f'Reminder: for {r.reminder} at {r.time}', title=f'{r.reminder} at {r.time}')
             print(r.reminder)
