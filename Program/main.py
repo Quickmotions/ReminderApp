@@ -1,4 +1,6 @@
-
+# other files
+from time import update_reminder_times, update_reminder_dates
+# built in imports
 from time import sleep
 import threading as th
 from datetime import datetime
@@ -29,20 +31,7 @@ class FileManager:
         with open('Storage\\reminders.csv', 'a') as f:
             f.write(f'{self.reminder},{self.time},{self.date},{self.repeat}\n')
 
-    def update_reminder_times(self):
-        now = datetime.now()
-        current_time = str(now.strftime("%H:%M"))
-        current_date = str(now.date())
-        if self.time <= current_time and self.date <= current_date:
-            if self.repeat == 'hourly':
-                if int(self.time[:2]) < 23:
-                    self.time = str(int(self.time[:2]) + 1) + self.time[2:]
-                else:
-                    self.time = '00' + self.time[2:]
-            if self.repeat == 'daily':
-                if int(self.date[8:]) < 30: # have to add diffrence depending on months maybe mo0ve to new file
-                    self.date = self.date[:8] + str(int(self.date[8:]) + 1)
-            # 2021-07-2
+
 
 def time_manager(r_list):
     while True:
@@ -50,6 +39,10 @@ def time_manager(r_list):
         current_time = now.strftime("%H:%M")
         current_date = now.date()
         check_reminders(r_list, current_time, current_date)
+        # update reminders
+        for reminder in reminders:
+            reminder.time = update_reminder_times(reminder.time, reminder.date, reminder.repeat)
+        # check each min
         sleep(60)
 
 
