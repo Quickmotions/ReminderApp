@@ -15,9 +15,8 @@ class FileManager:
         else:
             f_line = f_line.strip('\n').split(',')
             self.name = f_line[0]
-            self.time = f_line[1]
-            self.date = f_line[2]
-            self.repeat = f_line[3]
+            self.datetime = f_line[1]
+            self.repeat = f_line[2]
             print(self.date)
 
             print(self.date)
@@ -25,8 +24,7 @@ class FileManager:
     def create_new(self):
         print('Create a new Reminder:') # need to convert date and time into datetime object
         self.name = input('Reminder Name: ')
-        self.time = input('Reminder Time (HH:MM): ')
-        self.date = input('Reminder Date (YY:MM:DD): ')
+        self.datetime = input('Reminder Time (HH:MM): ')
         print('Reminder Repeat Options:\n-hourly\n-daily\n-weekly\n-monthly\n-yearly,')
         self.repeat = input('Reminder Repeat: ')
         with open('Storage\\reminders.csv', 'a') as f:
