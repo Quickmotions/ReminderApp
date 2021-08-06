@@ -9,6 +9,6 @@ if __name__ == '__main__':
     from threading import Thread
 
     reminders = create_reminders()
-
-    time_thread = Thread(target=check_reminders, args=[reminders, get_datetime])
-    time_thread.start()
+    while True:  # 1 min loop
+        check_reminders(reminders, current_datetime)
+        sleep(60)
