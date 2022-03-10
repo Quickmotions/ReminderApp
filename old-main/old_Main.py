@@ -41,7 +41,7 @@ def time_manager(r_list):
         # check each min
         sleep(60)
 
-
+\
 def check_reminders(r_list, datetime_now):
 
     # update timers that have expired
